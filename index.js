@@ -9,6 +9,7 @@ morgan.token('post', (request) => {
   }
 })
 
+app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
 
 const cors = require('cors')
@@ -64,7 +65,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  persons = persons.filter(person => person.id !== id)
+  persons = persons.filter(person => person.id !== String(id))
 
   response.status(204).end()
 })
@@ -73,7 +74,7 @@ app.post('/api/persons', (request, response) => {
   const body = request.body
   console.log(body)
 
-  const id = Math.floor(Math.random() * 10000) + 1
+  const id = String(Math.floor(Math.random() * 10000) + 1)
 
   if (!body.name) {
     return response.status(400).json({ 
